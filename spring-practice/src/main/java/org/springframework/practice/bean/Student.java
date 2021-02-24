@@ -21,7 +21,7 @@ public class Student implements ApplicationContextAware {
         this.age = age;
     }
 
-    private String name;
+    private String name="wang5";
 
     private Integer age ;
 
@@ -42,7 +42,6 @@ public class Student implements ApplicationContextAware {
     }
 
     public void init(){
-        System.out.println("init");
         this.setName("li4");
     }
 

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.practice.bean.Blue;
 import org.springframework.practice.bean.Student;
 import org.springframework.practice.bean.Red;
+import org.springframework.practice.bean.Yello;
 
 /**
  * @Description TODO
@@ -27,8 +28,8 @@ public class LifycycleTest {
      *      afterPropertiesSet ： Bean实例化完成并赋值完毕之后调用初始化方法
      *  3、使用 PostConstruct 注解 ,PreDestroy 注解
      *  4、BeanPostProcessor bean初始化前后进行处理
-     *      postProcessBeforeInitialization 任何初始化方法调用之前调用
-     *      postProcessAfterInitialization 所有初始化方法之后调用
+     *      postProcessBeforeInitialization Bean创建完成初始化之前调用
+     *      postProcessAfterInitialization Bean创建完成初始化之后调用
      *      --->
          *      //完成自动注入
          *       populateBean
@@ -43,15 +44,21 @@ public class LifycycleTest {
     public static class MyBeanPostProcessor implements BeanPostProcessor {
 
         public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-            System.out.println("postProcessBeforeInitialization:" + "beanName=" +beanName);
+			if ("student".equals(beanName)) {
+				Student student = (Student) bean;
+				student.setName("66");
+				return student;
+			}
             return bean;
         }
 
         public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-            System.out.println("postProcessAfterInitialization:" + "beanName=" +beanName);
-            Student student = (Student) bean;
-            student.setName("66");
-            return student;
+            if ("student".equals(beanName)) {
+				Student student = (Student) bean;
+				student.setName("66");
+				return student;
+			}
+            return bean;
         }
     }
 
@@ -67,14 +74,20 @@ public class LifycycleTest {
             return new Student("zhang3",12);
         }
 
+        /*@Bean
+		Yello yello(){
+        	return new Yello();
+		}*/
+
     }
 
     @Test
 	public void test01(){
 		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(BeanConfig.class);
-		Student bean = applicationContext.getBean(Student.class);
-		System.out.println(bean.getName());
-		applicationContext.close();
+		String[] beanDefinitionNames = applicationContext.getBeanDefinitionNames();
+		for (String beanDefinitionName : beanDefinitionNames) {
+			System.out.println(beanDefinitionName);
+		}
 	}
 
 }

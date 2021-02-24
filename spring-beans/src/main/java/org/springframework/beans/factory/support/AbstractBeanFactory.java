@@ -402,6 +402,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		return (T) bean;
 	}
 
+
 	@Override
 	public boolean containsBean(String name) {
 		String beanName = transformedBeanName(name);

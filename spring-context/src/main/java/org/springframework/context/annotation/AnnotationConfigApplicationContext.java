@@ -84,8 +84,11 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * {@link Configuration @Configuration} classes
 	 */
 	public AnnotationConfigApplicationContext(Class<?>... componentClasses) {
+		// 1. 创建 注解解析器 和 class文件扫描器
 		this();
+		// 2.加载 componentClasses
 		register(componentClasses);
+		// 2.刷新容器
 		refresh();
 	}
 
