@@ -1,6 +1,7 @@
 package org.springframework.practice;
 
 
+import org.junit.Test;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanNameGenerator;
@@ -12,6 +13,10 @@ import org.springframework.practice.bean.Person;
 import org.springframework.practice.bean.Student;
 import org.springframework.practice.bean.Yello;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 /**
  * @Description TODO
  * @Author wuc
@@ -21,7 +26,7 @@ import org.springframework.practice.bean.Yello;
 public class BeanTest {
 
     /**
-     * 注册bean的集中方式
+     * 注册bean的几种方式
      * 1、使用Controller ,Service ,Component 等注解
      * 2、在配置类中使用 Bean
      * 3、使用Import注解
@@ -30,7 +35,7 @@ public class BeanTest {
      *  3.3 ImportBeanDefinitionRegistrar.class
      * 4、FactoryBean
      */
-    @Import({Person.class,MyImportSelector.class,MyImportBeanDefinitionRegistrar.class})
+    @Import({Person.class/*,MyImportSelector.class,MyImportBeanDefinitionRegistrar.class*/})
     @Configuration
     public static class BeanConfig{
 
@@ -39,10 +44,10 @@ public class BeanTest {
             return new Student("zhang3",12);
         }
 
-        @Bean
+        /*@Bean
         YelloFactoryBean yelloFactoryBean(){
             return new YelloFactoryBean();
-        }
+        }*/
     }
 
     public static class YelloFactoryBean implements FactoryBean<Yello> {
@@ -77,11 +82,32 @@ public class BeanTest {
         }
     }
 
-    public static void main(String[] args) {
+	@Test
+    public void test01(){
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(BeanConfig.class);
         String[] beanDefinitionNames = applicationContext.getBeanDefinitionNames();
         for (int i=0;i<beanDefinitionNames.length;i++){
             System.out.println(beanDefinitionNames[i]);
         }
     }
+
+    @Test
+	public void test02(){
+		List<Integer> ids = new ArrayList<Integer>();
+		ids.add(2);
+		ids.add(3);
+		ids.add(4);
+		ids.add(5);
+		ids.sort(new Comparator() {
+			@Override
+			public int compare(Object o1, Object o2) {
+				return 0;
+			}
+
+			@Override
+			public boolean equals(Object obj) {
+				return false;
+			}
+		});
+	}
 }

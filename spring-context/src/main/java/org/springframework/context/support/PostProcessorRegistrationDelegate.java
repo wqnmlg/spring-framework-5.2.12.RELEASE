@@ -53,6 +53,11 @@ final class PostProcessorRegistrationDelegate {
 	}
 
 
+	/**
+	 * 1、BeanFactoryPostProcessor 有一个BeanDefinitionRegistryPostProcessor实现 首先 将这2者进行分类到  regularPostProcessors 和  registryProcessors 集合中
+	 * 2、对所有直接实现BeanDefinitionRegistryPostProcessor 的类根据优先级进行排序后注入
+	 * 3、对所有直接实现BeanFactoryPostProcessor 的类根据优先级进行排序后 注入
+	 */
 	public static void invokeBeanFactoryPostProcessors(
 			ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {
 

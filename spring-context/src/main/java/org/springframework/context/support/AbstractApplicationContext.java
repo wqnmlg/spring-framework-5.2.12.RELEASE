@@ -517,23 +517,28 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	public void refresh() throws BeansException, IllegalStateException {
 		synchronized (this.startupShutdownMonitor) {
 			// Prepare this context for refreshing.
+			//1、预处理 自定义加载属性 和属性校验
 			prepareRefresh();
 
 			// Tell the subclass to refresh the internal bean factory.
+			//2、创建 BeanFactory 默认 DefaultListableBeanFactory
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
+			//3、对 BeanFactory 进行各种配置
 			prepareBeanFactory(beanFactory);
 
 			try {
 				// Allows post-processing of the bean factory in context subclasses.
+				//4、留给子类实现对 BeanFactory 做进一步的设置
 				postProcessBeanFactory(beanFactory);
 
 				// Invoke factory processors registered as beans in the context.
+				// 5、BeanFactory的后置处理器 （可以修改BeanDefinition的各种属性或者向容器添加BeanDefinition）
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				// Register bean processors that intercept bean creation.
-				// 注册所有bean后置处理器
+				//6、向容器注册所有 BeanPostProcess 后置处理器
 				registerBeanPostProcessors(beanFactory);
 
 				// Initialize message source for this context.
@@ -548,8 +553,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				// Check for listener beans and register them.
 				registerListeners();
 
-				// 实例化所有非懒加载的单例bean
 				// Instantiate all remaining (non-lazy-init) singletons.
+				// 实例化所有非懒加载的单例Bean
 				finishBeanFactoryInitialization(beanFactory);
 
 				// Last step: publish corresponding event.
